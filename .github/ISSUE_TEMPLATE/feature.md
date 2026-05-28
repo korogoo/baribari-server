@@ -1,9 +1,9 @@
 ---
 name: ✨feature
 about: 새 기능 추가
-title: "feat: "
+title: "[Feat] "
 labels: ✨feature
-assignees: ‘’
+assignees: ''
 ---
 
 ## 작업 내용
@@ -13,9 +13,7 @@ assignees: ‘’
 <!-- 어떤 문제를 해결하나? 사용자/시스템의 어떤 한계? -->
 
 ## 완료 조건
-- [ ]
-- [ ]
-- [ ]
+- [ ] 
 
 ## 참고 자료
 <!-- API 명세서, 관련 문서, 참고 링크 -->
