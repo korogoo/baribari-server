@@ -5,4 +5,8 @@ public record Pin(
     double longitude,
     Sequence sequence
 ) {
+
+    public int sequenceValue() {
+        return sequence.value();
+    }
 }

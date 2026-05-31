@@ -31,7 +31,7 @@ class MemberMapperTest {
     }
 
     @Test
-    void 회원_도메인_엔티티를_jpa엔티티로_변환한다() {
+    void 회원_도메인_엔티티를_저장을_위한_jpa엔티티로_변환한다() {
         // given
         final Member domain = new Member(
             "name",
@@ -44,6 +44,7 @@ class MemberMapperTest {
         final MemberJpaEntity entity = MemberMapper.toEntityForSave(domain);
 
         // then
+        assertThat(entity.getId()).isNull();
         assertThat(entity.getName()).isEqualTo(domain.getName());
         assertThat(entity.getEmail()).isEqualTo(domain.getEmail());
         assertThat(entity.getLoginProvider()).isEqualTo(domain.getLoginProvider());
