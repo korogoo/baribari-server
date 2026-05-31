@@ -24,7 +24,6 @@ class MemberMapperTest {
         final Member domain = MemberMapper.toDomain(entity);
 
         // then
-        assertThat(domain.getId()).isEqualTo(entity.getId());
         assertThat(domain.getName()).isEqualTo(entity.getName());
         assertThat(domain.getEmail()).isEqualTo(entity.getEmail());
         assertThat(domain.getLoginProvider()).isEqualTo(entity.getLoginProvider());

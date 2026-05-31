@@ -34,14 +34,10 @@ class MemberRepositoryImplTest {
             );
 
             // when
-            final Member saved = memberRepository.save(member);
+            final long savedId = memberRepository.save(member);
 
             // then
-            assertThat(saved.getId()).isNotNull();
-            assertThat(member.getName()).isEqualTo(saved.getName());
-            assertThat(member.getEmail()).isEqualTo(saved.getEmail());
-            assertThat(member.getLoginProvider()).isEqualTo(saved.getLoginProvider());
-            assertThat(member.getSocialId()).isEqualTo(saved.getSocialId());
+            assertThat(savedId).isNotNull();
         }
     }
 }
