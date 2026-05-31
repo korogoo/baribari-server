@@ -1,10 +1,8 @@
-package com.twin.baribari.member.infrastructure;
+package com.twin.baribari.member.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.twin.baribari.member.domain.LoginProvider;
-import com.twin.baribari.member.domain.Member;
-import com.twin.baribari.member.domain.MemberRepository;
+import com.twin.baribari.member.infrastructure.MemberRepositoryImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -14,7 +12,7 @@ import org.springframework.context.annotation.Import;
 
 @DataJpaTest
 @Import(MemberRepositoryImpl.class)
-class MemberRepositoryImplTest {
+class MemberRepositoryTest {
 
     @Autowired
     MemberRepository memberRepository;
