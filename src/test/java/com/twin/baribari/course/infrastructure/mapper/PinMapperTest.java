@@ -27,9 +27,9 @@ class PinMapperTest {
     void 핀_도메인_엔티티를_저장을_위한_jpa엔티티로_변환한다() {
         // given
         final Pin domain = PinFixture.start();
+        final long courseId = 2L;
 
         // when
-        final long courseId = 2L;
         final PinJpaEntity entity = PinMapper.toEntityForSave(domain, courseId);
 
         // then
