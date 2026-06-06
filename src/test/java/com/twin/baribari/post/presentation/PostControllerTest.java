@@ -83,4 +83,19 @@ class PostControllerTest {
             .andExpect(jsonPath("$[0].title").value(post.getTitle()))
             .andExpect(jsonPath("$[0].memberId").value(post.getMemberId()));
     }
+
+    @Test
+    void 게시물_단건을_조회한다() throws Exception {
+        // given
+        final CourseJpaEntity course = courseJpaRepository.save(CourseFixture.entity());
+        final PostJpaEntity post = postJpaRepository.save(PostFixture.entity(course.getId()));
+
+        // when & then
+        mockMvc.perform(get("/posts/{id}", post.getId()))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(post.getId()))
+            .andExpect(jsonPath("$.title").value(post.getTitle()))
+            .andExpect(jsonPath("$.body").value(post.getBody()))
+            .andExpect(jsonPath("$.memberId").value(post.getMemberId()));
+    }
 }

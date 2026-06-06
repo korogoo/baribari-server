@@ -2,6 +2,7 @@ package com.twin.baribari.post.application;
 
 import com.twin.baribari.course.application.CourseService;
 import com.twin.baribari.global.application.dto.ResourceIdResponse;
+import com.twin.baribari.post.application.dto.PostDetailResponse;
 import com.twin.baribari.post.application.dto.PostSummaryResponse;
 import com.twin.baribari.post.presentation.dto.CreatePostRequest;
 import java.util.List;
@@ -17,10 +18,15 @@ public class PostApplicationService {
     private final CourseService courseService;
 
     @Transactional(readOnly = true)
+    public PostDetailResponse getById(final long id) {
+        return PostDetailResponse.from(postService.getById(id));
+    }
+
+    @Transactional(readOnly = true)
     public List<PostSummaryResponse> getAll() {
         return postService.getAll().stream()
-                .map(PostSummaryResponse::from)
-                .toList();
+            .map(PostSummaryResponse::from)
+            .toList();
     }
 
     @Transactional
