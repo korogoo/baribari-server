@@ -33,7 +33,7 @@ public class PinFixture {
 
     public static PinJpaEntity startEntity(final CourseJpaEntity course) {
         return PinJpaEntity.builder()
-            .longitude(37.5665)
+            .latitude(37.5665)
             .longitude(126.9780)
             .sequence(0)
             .course(course)
@@ -42,7 +42,7 @@ public class PinFixture {
 
     public static PinJpaEntity waypointEntity(final CourseJpaEntity course, final int sequence) {
         return PinJpaEntity.builder()
-            .longitude(37.5651)
+            .latitude(37.5651)
             .longitude(126.9895)
             .sequence(sequence)
             .course(course)
@@ -51,7 +51,7 @@ public class PinFixture {
 
     public static PinJpaEntity endEntity(final CourseJpaEntity course, final int sequence) {
         return PinJpaEntity.builder()
-            .longitude(37.5700)
+            .latitude(37.5700)
             .longitude(126.9820)
             .sequence(sequence)
             .course(course)
