@@ -15,12 +15,11 @@ public class MemberMapper {
     }
 
     public static MemberJpaEntity toEntityForSave(final Member domain) {
-        return new MemberJpaEntity(
-            null,
-            domain.getName(),
-            domain.getEmail(),
-            domain.getLoginProvider(),
-            domain.getSocialId()
-        );
+        return MemberJpaEntity.builder()
+            .name(domain.getName())
+            .email(domain.getEmail())
+            .loginProvider(domain.getLoginProvider())
+            .socialId(domain.getSocialId())
+            .build();
     }
 }
