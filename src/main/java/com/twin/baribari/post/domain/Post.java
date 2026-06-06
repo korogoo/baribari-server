@@ -9,11 +9,18 @@ public class Post {
     private final String title;
     private final String body;
     private final long memberId;
+    private final long courseId;
 
-    public Post(final String title, final String body, final long memberId) {
+    public Post(
+        final String title,
+        final String body,
+        final long memberId,
+        final long courseId
+    ) {
         this.title = title;
         this.body = body;
         this.memberId = memberId;
+        this.courseId = courseId;
 
         validateArguments();
     }
@@ -24,6 +31,9 @@ public class Post {
 
         if (memberId <= 0) {
             throw new IllegalStateException("게시물 작성자의 아이디는 0 이상이어야 합니다.");
+        }
+        if (courseId <= 0) {
+            throw new IllegalStateException("게시물 코스의 아이디는 0 이상이어야 합니다.");
         }
     }
 }

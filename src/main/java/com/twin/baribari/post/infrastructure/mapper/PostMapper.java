@@ -1,6 +1,5 @@
 package com.twin.baribari.post.infrastructure.mapper;
 
-import com.twin.baribari.course.infrastructure.entity.CourseJpaEntity;
 import com.twin.baribari.post.domain.Post;
 import com.twin.baribari.post.infrastructure.entity.PostJpaEntity;
 
@@ -10,19 +9,17 @@ public class PostMapper {
         return new Post(
             entity.getTitle(),
             entity.getBody(),
-            entity.getMemberId()
+            entity.getMemberId(),
+            entity.getCourseId()
         );
     }
 
-    public static PostJpaEntity toEntityForSave(
-        final Post domain,
-        final CourseJpaEntity courseJpaEntity
-    ) {
+    public static PostJpaEntity toEntityForSave(final Post domain) {
         return PostJpaEntity.builder()
             .title(domain.getTitle())
             .body(domain.getBody())
             .memberId(domain.getMemberId())
-            .course(courseJpaEntity)
+            .courseId(domain.getCourseId())
             .build();
     }
 }

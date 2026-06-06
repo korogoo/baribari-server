@@ -15,25 +15,31 @@ class PostTest {
 
         @Test
         void 게시물_제목_내용_회원_아이디로_생성할_수_있다() {
-            assertThatCode(() -> new Post("제목", "내용", 1L))
+            assertThatCode(() -> new Post("제목", "내용", 2L, 3L))
                 .doesNotThrowAnyException();
         }
 
         @Test
         void 게시물의_제목이_NULL이면_예외가_발생한다() {
-            assertThatThrownBy(() -> new Post(null, "내용", 1L))
+            assertThatThrownBy(() -> new Post(null, "내용", 2L, 3L))
                 .isInstanceOf(NullPointerException.class);
         }
 
         @Test
         void 게시물의_바디가_NULL이면_예외가_발생한다() {
-            assertThatThrownBy(() -> new Post("제목", null, 1L))
+            assertThatThrownBy(() -> new Post("제목", null, 2L, 3L))
                 .isInstanceOf(NullPointerException.class);
         }
 
         @Test
         void 게시물_작성자_아이디가_0이하면_예외가_발생한다() {
-            assertThatThrownBy(() -> new Post("제목", "내용", 0))
+            assertThatThrownBy(() -> new Post("제목", "내용", 0L, 2L))
+                .isInstanceOf(IllegalStateException.class);
+        }
+
+        @Test
+        void 게시물_코스_아이디가_0이하면_예외가_발생한다() {
+            assertThatThrownBy(() -> new Post("제목", "내용", 2L, 0L))
                 .isInstanceOf(IllegalStateException.class);
         }
     }
