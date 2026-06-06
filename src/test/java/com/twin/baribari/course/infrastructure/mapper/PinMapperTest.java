@@ -17,7 +17,6 @@ class PinMapperTest {
         final PinJpaEntity entity = PinFixture.startEntity(CourseFixture.entity());
 
         // when
-
         final Pin domain = PinMapper.toDomain(entity);
 
         // then

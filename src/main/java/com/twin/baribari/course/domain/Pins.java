@@ -9,8 +9,12 @@ public class Pins {
     private final List<Pin> pins;
 
     public Pins(final List<Pin> pins) {
-        this.pins = pins;
+        this.pins = List.copyOf(pins);
         validateRequiredPinTypes();
+    }
+
+    public List<Pin> toList() {
+        return List.copyOf(pins);
     }
 
     private void validateRequiredPinTypes() {

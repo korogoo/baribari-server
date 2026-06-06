@@ -1,5 +1,6 @@
 package com.twin.baribari.course.domain;
 
+import java.util.List;
 import java.util.Objects;
 import lombok.Getter;
 
@@ -23,6 +24,10 @@ public class Course {
         this.pins = pins;
 
         validateArguments();
+    }
+
+    public List<Pin> getPins() {
+        return pins.toList();
     }
 
     private void validateArguments() {
