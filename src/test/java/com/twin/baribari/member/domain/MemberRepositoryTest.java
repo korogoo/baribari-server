@@ -18,7 +18,7 @@ class MemberRepositoryTest {
     @Test
     void 회원_정보를_저장한다() {
         // given
-        Member member = new Member(
+        final Member member = new Member(
             "name",
             "baribari123@gmail.com",
             LoginProvider.GOOGLE,
