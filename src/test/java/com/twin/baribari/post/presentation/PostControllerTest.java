@@ -1,6 +1,7 @@
 package com.twin.baribari.post.presentation;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -8,8 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.twin.baribari.course.infrastructure.CourseJpaRepository;
 import com.twin.baribari.course.infrastructure.entity.CourseJpaEntity;
-import com.twin.baribari.course.presentation.dto.CreateCourseRequest;
-import com.twin.baribari.course.presentation.dto.CreatePinRequest;
+import com.twin.baribari.fixture.CourseFixture;
+import com.twin.baribari.fixture.PostFixture;
 import com.twin.baribari.post.infrastructure.PostJpaRepository;
 import com.twin.baribari.post.infrastructure.entity.PostJpaEntity;
 import com.twin.baribari.post.presentation.dto.CreatePostRequest;
@@ -42,24 +43,14 @@ class PostControllerTest {
     private CourseJpaRepository courseJpaRepository;
 
     @Test
-    void upload() throws Exception {
+    void 게시물을_업로드한다() throws Exception {
         // given
-        CreatePostRequest request = new CreatePostRequest(
-            "한강 라이딩",
-            "정말 좋았습니다.",
-            new CreateCourseRequest(
-                "https://image.url",
-                "한강 코스",
-                "한강을 따라 달리는 코스",
-                List.of(
-                    new CreatePinRequest(37.5, 127.0),
-                    new CreatePinRequest(37.6, 127.1)
-                )
-            )
-        );
+        final CreatePostRequest request = PostFixture.createRequest();
+        final long memberId = 1L;
 
         // when
-        final ResultActions response = mockMvc.perform(post("/posts?memberId=1")
+        final ResultActions response = mockMvc.perform(post("/posts")
+            .queryParam("memberId", String.valueOf(memberId))
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)));
 
@@ -70,12 +61,26 @@ class PostControllerTest {
 
         List<PostJpaEntity> posts = postJpaRepository.findAll();
         assertThat(posts).hasSize(1);
-        assertThat(posts.get(0).getTitle()).isEqualTo("한강 라이딩");
-        assertThat(posts.get(0).getMemberId()).isEqualTo(1L);
+        assertThat(posts.get(0).getTitle()).isEqualTo(request.title());
+        assertThat(posts.get(0).getMemberId()).isEqualTo(memberId);
 
         List<CourseJpaEntity> courses = courseJpaRepository.findAll();
         assertThat(courses).hasSize(1);
-        assertThat(courses.get(0).getTitle()).isEqualTo("한강 코스");
+        assertThat(courses.get(0).getTitle()).isEqualTo(request.courseTitle());
         assertThat(courses.get(0).getPins()).hasSize(2);
+    }
+
+    @Test
+    void 모든_게시물을_조회한다() throws Exception {
+        // given
+        final CourseJpaEntity course = courseJpaRepository.save(CourseFixture.entity());
+        final PostJpaEntity post = postJpaRepository.save(PostFixture.entity(course.getId()));
+
+        // when & then
+        mockMvc.perform(get("/posts"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.length()").value(1))
+            .andExpect(jsonPath("$[0].title").value(post.getTitle()))
+            .andExpect(jsonPath("$[0].memberId").value(post.getMemberId()));
     }
 }

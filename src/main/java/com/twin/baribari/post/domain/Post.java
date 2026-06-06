@@ -6,10 +6,27 @@ import lombok.Getter;
 @Getter
 public class Post {
 
+    private final Long id;
     private final String title;
     private final String body;
     private final long memberId;
     private final long courseId;
+
+    public Post(
+        final Long id,
+        final String title,
+        final String body,
+        final long memberId,
+        final long courseId
+    ) {
+        this.id = id;
+        this.title = title;
+        this.body = body;
+        this.memberId = memberId;
+        this.courseId = courseId;
+
+        validateArguments();
+    }
 
     public Post(
         final String title,
@@ -17,12 +34,7 @@ public class Post {
         final long memberId,
         final long courseId
     ) {
-        this.title = title;
-        this.body = body;
-        this.memberId = memberId;
-        this.courseId = courseId;
-
-        validateArguments();
+        this(null, title, body, memberId, courseId);
     }
 
     private void validateArguments() {

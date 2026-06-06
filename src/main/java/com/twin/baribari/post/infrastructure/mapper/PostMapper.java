@@ -7,6 +7,7 @@ public class PostMapper {
 
     public static Post toDomain(final PostJpaEntity entity) {
         return new Post(
+            entity.getId(),
             entity.getTitle(),
             entity.getBody(),
             entity.getMemberId(),

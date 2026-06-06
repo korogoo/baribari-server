@@ -2,6 +2,7 @@ package com.twin.baribari.post.application;
 
 import com.twin.baribari.post.domain.Post;
 import com.twin.baribari.post.domain.PostRepository;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,10 @@ import org.springframework.stereotype.Service;
 public class PostService {
 
     private final PostRepository postRepository;
+
+    public List<Post> getAll() {
+        return postRepository.findAll();
+    }
 
     public long upload(
         final String title,
