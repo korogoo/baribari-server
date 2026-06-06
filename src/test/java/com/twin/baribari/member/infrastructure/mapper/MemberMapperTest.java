@@ -12,13 +12,13 @@ class MemberMapperTest {
     @Test
     void 회원_jpa엔티티를_도메인_엔티티로_변환한다() {
         // given
-        final MemberJpaEntity entity = new MemberJpaEntity(
-            1L,
-            "name",
-            "baribari123@gmail.com",
-            LoginProvider.GOOGLE,
-            "socialId"
-        );
+        final MemberJpaEntity entity = MemberJpaEntity.builder()
+            .id(1L)
+            .name("name")
+            .email("baribari123@gmail.com")
+            .loginProvider(LoginProvider.APPLE)
+            .socialId("socialId")
+            .build();
 
         // when
         final Member domain = MemberMapper.toDomain(entity);
@@ -50,5 +50,4 @@ class MemberMapperTest {
         assertThat(entity.getLoginProvider()).isEqualTo(domain.getLoginProvider());
         assertThat(entity.getSocialId()).isEqualTo(domain.getSocialId());
     }
-
 }

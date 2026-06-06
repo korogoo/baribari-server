@@ -2,6 +2,7 @@ package com.twin.baribari.fixture;
 
 import com.twin.baribari.course.domain.Pin;
 import com.twin.baribari.course.domain.Sequence;
+import com.twin.baribari.course.infrastructure.entity.CourseJpaEntity;
 import com.twin.baribari.course.infrastructure.entity.PinJpaEntity;
 
 public class PinFixture {
@@ -30,33 +31,30 @@ public class PinFixture {
         );
     }
 
-    public static PinJpaEntity startEntityWithCourseId(final long courseId) {
-        return new PinJpaEntity(
-            1L,
-            37.5665,
-            126.9780,
-            1,
-            courseId
-        );
+    public static PinJpaEntity startEntity(final CourseJpaEntity course) {
+        return PinJpaEntity.builder()
+            .longitude(37.5665)
+            .longitude(126.9780)
+            .sequence(0)
+            .course(course)
+            .build();
     }
 
-    public static PinJpaEntity waypointEntityWithCourseId(final long courseId, final int sequence) {
-        return new PinJpaEntity(
-            2L,
-            37.5651,
-            126.9895,
-            sequence,
-            courseId
-        );
+    public static PinJpaEntity waypointEntity(final CourseJpaEntity course, final int sequence) {
+        return PinJpaEntity.builder()
+            .longitude(37.5651)
+            .longitude(126.9895)
+            .sequence(sequence)
+            .course(course)
+            .build();
     }
 
-    public static PinJpaEntity endEntityWithCourseId(final long courseId, final int sequence) {
-        return new PinJpaEntity(
-            3L,
-            37.5700,
-            126.9820,
-            sequence,
-            courseId
-        );
+    public static PinJpaEntity endEntity(final CourseJpaEntity course, final int sequence) {
+        return PinJpaEntity.builder()
+            .longitude(37.5700)
+            .longitude(126.9820)
+            .sequence(sequence)
+            .course(course)
+            .build();
     }
 }
