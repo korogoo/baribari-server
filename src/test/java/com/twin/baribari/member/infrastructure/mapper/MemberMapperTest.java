@@ -2,7 +2,7 @@ package com.twin.baribari.member.infrastructure.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.twin.baribari.member.domain.LoginProvider;
+import com.twin.baribari.fixture.MemberFixture;
 import com.twin.baribari.member.domain.Member;
 import com.twin.baribari.member.infrastructure.entity.MemberJpaEntity;
 import org.junit.jupiter.api.Test;
@@ -12,13 +12,7 @@ class MemberMapperTest {
     @Test
     void 회원_jpa엔티티를_도메인_엔티티로_변환한다() {
         // given
-        final MemberJpaEntity entity = MemberJpaEntity.builder()
-            .id(1L)
-            .name("name")
-            .email("baribari123@gmail.com")
-            .loginProvider(LoginProvider.APPLE)
-            .socialId("socialId")
-            .build();
+        final MemberJpaEntity entity = MemberFixture.entity();
 
         // when
         final Member domain = MemberMapper.toDomain(entity);
@@ -33,12 +27,7 @@ class MemberMapperTest {
     @Test
     void 회원_도메인_엔티티를_저장을_위한_jpa엔티티로_변환한다() {
         // given
-        final Member domain = new Member(
-            "name",
-            "baribari123@gmail.com",
-            LoginProvider.GOOGLE,
-            "socialId"
-        );
+        final Member domain = MemberFixture.domain();
 
         // when
         final MemberJpaEntity entity = MemberMapper.toEntityForSave(domain);
