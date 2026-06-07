@@ -74,5 +74,18 @@ class MemberTest {
             // then
             assertThat(equals).isFalse();
         }
+
+        @Test
+        void 아이디가_null_이면_다른_객체이다() {
+            // given
+            final Member member = new Member("김바리", "baribari@gmail.com", LoginProvider.KAKAO, "kakao_123");
+            final Member other = new Member("김바리", "baribari@gmail.com", LoginProvider.KAKAO, "kakao_123");
+
+            // when
+            final boolean equals = member.equals(other);
+
+            // then
+            assertThat(equals).isFalse();
+        }
     }
 }

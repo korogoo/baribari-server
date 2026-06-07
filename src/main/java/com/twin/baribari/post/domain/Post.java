@@ -49,7 +49,6 @@ public class Post {
 
     private void validateArguments() {
         Objects.requireNonNull(title, "게시물 title 은 필수값입니다.");
-        Objects.requireNonNull(body, "게시물 body 는 필수값입니다.");
 
         if (memberId <= 0) {
             throw new IllegalStateException("게시물 작성자의 아이디는 0 이상이어야 합니다.");
@@ -65,7 +64,7 @@ public class Post {
             return false;
         }
         final Post post = (Post) other;
-        return Objects.equals(id, post.id);
+        return id != null && Objects.equals(id, post.id);
     }
 
     @Override

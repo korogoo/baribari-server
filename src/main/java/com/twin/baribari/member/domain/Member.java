@@ -49,7 +49,7 @@ public class Member {
             return false;
         }
         final Member member = (Member) other;
-        return Objects.equals(id, member.id);
+        return id != null && Objects.equals(id, member.id);
     }
 
     @Override

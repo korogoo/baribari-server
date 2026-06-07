@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.twin.baribari.fixture.PinFixture;
+import com.twin.baribari.fixture.PinsFixture;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -40,5 +41,18 @@ class PinsTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("2개");
         }
+    }
+
+    @Test
+    void 핀_리스트_조회_시_불변_리스트를_반환한다() {
+        // given
+        final Pins pins = PinsFixture.pins();
+
+        // when
+        final List<Pin> pinList = pins.toList();
+
+        // then
+        assertThatThrownBy(pinList::removeFirst)
+            .isInstanceOf(UnsupportedOperationException.class);
     }
 }

@@ -80,5 +80,18 @@ class PinTest {
             // then
             assertThat(equals).isFalse();
         }
+
+        @Test
+        void 아이디가_null_이면_다른_객체이다() {
+            // given
+            final Pin pin = new Pin(37.5665, 126.9780, 0);
+            final Pin other = new Pin(37.5665, 126.9780, 0);
+
+            // when
+            final boolean equals = pin.equals(other);
+
+            // then
+            assertThat(equals).isFalse();
+        }
     }
 }

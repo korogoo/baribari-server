@@ -39,7 +39,7 @@ public class Pin {
             return false;
         }
         final Pin pin = (Pin) other;
-        return Objects.equals(id, pin.id);
+        return id != null && Objects.equals(id, pin.id);
     }
 
     @Override
