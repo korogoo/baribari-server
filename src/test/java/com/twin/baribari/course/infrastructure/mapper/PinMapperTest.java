@@ -20,8 +20,8 @@ class PinMapperTest {
         final Pin domain = PinMapper.toDomain(entity);
 
         // then
-        assertThat(domain.latitude()).isEqualTo(entity.getLatitude());
-        assertThat(domain.longitude()).isEqualTo(entity.getLongitude());
+        assertThat(domain.getLatitude()).isEqualTo(entity.getLatitude());
+        assertThat(domain.getLongitude()).isEqualTo(entity.getLongitude());
         assertThat(domain.sequenceValue()).isEqualTo(entity.getSequence());
     }
 
@@ -36,8 +36,8 @@ class PinMapperTest {
 
         // then
         assertThat(entity.getId()).isNull();
-        assertThat(entity.getLatitude()).isEqualTo(domain.latitude());
-        assertThat(entity.getLongitude()).isEqualTo(domain.longitude());
+        assertThat(entity.getLatitude()).isEqualTo(domain.getLatitude());
+        assertThat(entity.getLongitude()).isEqualTo(domain.getLongitude());
         assertThat(entity.getSequence()).isEqualTo(domain.sequenceValue());
         assertThat(entity.getCourse().getId()).isEqualTo(courseEntity.getId());
     }

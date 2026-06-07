@@ -2,6 +2,7 @@ package com.twin.baribari.course.infrastructure;
 
 import com.twin.baribari.course.domain.Course;
 import com.twin.baribari.course.domain.CourseRepository;
+import com.twin.baribari.course.domain.exception.CourseNotFoundException;
 import com.twin.baribari.course.infrastructure.entity.CourseJpaEntity;
 import com.twin.baribari.course.infrastructure.mapper.CourseMapper;
 import lombok.AllArgsConstructor;
@@ -14,9 +15,9 @@ public class CourseRepositoryImpl implements CourseRepository {
     private final CourseJpaRepository courseJpaRepository;
 
     @Override
-    public long save(final Course course) {
+    public Course save(final Course course) {
         final CourseJpaEntity saved = courseJpaRepository.save(CourseMapper.toEntityForSave(course));
-        return saved.getId();
+        return CourseMapper.toDomain(saved);
     }
 
     @Override
@@ -27,7 +28,7 @@ public class CourseRepositoryImpl implements CourseRepository {
     @Override
     public Course getById(final long id) {
         final CourseJpaEntity found = courseJpaRepository.findById(id)
-            .orElseThrow(RuntimeException::new);
+            .orElseThrow(() -> new CourseNotFoundException(id));
         return CourseMapper.toDomain(found);
     }
 

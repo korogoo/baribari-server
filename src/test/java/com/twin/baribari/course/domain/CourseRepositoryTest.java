@@ -28,7 +28,7 @@ class CourseRepositoryTest {
         final Course course = CourseFixture.domain();
 
         // when
-        final long savedId = courseRepository.save(course);
+        final long savedId = courseRepository.save(course).getId();
 
         // then
         assertThat(courseRepository.existsById(savedId)).isTrue();
@@ -42,7 +42,7 @@ class CourseRepositoryTest {
         void 저장된_코스를_조회하면_TRUE를_반환한다() {
             // given
             final Course course = CourseFixture.domain();
-            final long savedId = courseRepository.save(course);
+            final long savedId = courseRepository.save(course).getId();
 
             // when
             final boolean exists = courseRepository.existsById(savedId);
@@ -73,7 +73,7 @@ class CourseRepositoryTest {
         void 저장된_코스_정보를_아이디로_조회한다() {
             // given
             final Course course = CourseFixture.domain();
-            final long savedId = courseRepository.save(course);
+            final long savedId = courseRepository.save(course).getId();
 
             // when
             final Course found = courseRepository.getById(savedId);
@@ -84,11 +84,11 @@ class CourseRepositoryTest {
             assertThat(found.getDescription()).isEqualTo(course.getDescription());
             assertThat(found.getPins())
                 .hasSize(course.getPins().size())
-                .extracting(Pin::latitude, Pin::longitude, Pin::sequenceValue)
+                .extracting(Pin::getLatitude, Pin::getLongitude, Pin::sequenceValue)
                 .containsExactly(
                     course.getPins().stream()
                         .map(pin ->
-                            tuple(pin.latitude(), pin.longitude(), pin.sequenceValue()))
+                            tuple(pin.getLatitude(), pin.getLongitude(), pin.sequenceValue()))
                         .toArray(Tuple[]::new)
                 );
         }
@@ -112,7 +112,7 @@ class CourseRepositoryTest {
         void 저장된_코스를_아이디로_삭제한다() {
             // given
             final Course course = CourseFixture.domain();
-            final long savedId = courseRepository.save(course);
+            final long savedId = courseRepository.save(course).getId();
 
             // when
             courseRepository.deleteById(savedId);

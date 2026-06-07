@@ -8,6 +8,7 @@ public class CourseMapper {
 
     public static Course toDomain(final CourseJpaEntity entity) {
         return new Course(
+            entity.getId(),
             entity.getImageUrl(),
             entity.getTitle(),
             entity.getDescription(),
@@ -19,6 +20,7 @@ public class CourseMapper {
 
     public static CourseJpaEntity toEntityForSave(final Course domain) {
         final CourseJpaEntity courseJpaEntity = CourseJpaEntity.builder()
+            .id(domain.getId())
             .imageUrl(domain.getImageUrl())
             .title(domain.getTitle())
             .description(domain.getDescription())

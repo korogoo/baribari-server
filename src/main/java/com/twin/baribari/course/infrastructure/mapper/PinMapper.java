@@ -9,16 +9,17 @@ public class PinMapper {
 
     public static Pin toDomain(final PinJpaEntity entity) {
         return new Pin(
+            entity.getId(),
             entity.getLatitude(),
             entity.getLongitude(),
-            new Sequence(entity.getSequence())
+            entity.getSequence()
         );
     }
 
     public static PinJpaEntity toEntityForSave(final Pin domain, final CourseJpaEntity courseJpaEntity) {
         return PinJpaEntity.builder()
-            .latitude(domain.latitude())
-            .longitude(domain.longitude())
+            .latitude(domain.getLatitude())
+            .longitude(domain.getLongitude())
             .sequence(domain.sequenceValue())
             .course(courseJpaEntity)
             .build();

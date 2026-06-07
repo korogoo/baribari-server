@@ -34,4 +34,9 @@ public class PostJpaEntity {
 
     @Column(name = "course_id", nullable = false)
     private Long courseId;
+
+    public void update(final String title, final String body) {
+        this.title = title;
+        this.body = body;
+    }
 }

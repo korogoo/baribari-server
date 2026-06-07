@@ -18,6 +18,7 @@ class PostMapperTest {
         final Post domain = PostMapper.toDomain(entity);
 
         // then
+        assertThat(domain.getId()).isEqualTo(entity.getId());
         assertThat(domain.getTitle()).isEqualTo(entity.getTitle());
         assertThat(domain.getBody()).isEqualTo(entity.getBody());
         assertThat(domain.getMemberId()).isEqualTo(entity.getMemberId());
