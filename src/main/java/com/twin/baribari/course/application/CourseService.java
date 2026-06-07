@@ -5,7 +5,7 @@ import com.twin.baribari.course.domain.Course;
 import com.twin.baribari.course.domain.CourseRepository;
 import com.twin.baribari.course.domain.Pin;
 import com.twin.baribari.course.domain.Pins;
-import com.twin.baribari.course.domain.Sequence;
+
 import java.util.List;
 import java.util.stream.IntStream;
 import lombok.AllArgsConstructor;
@@ -17,17 +17,14 @@ public class CourseService {
 
     private final CourseRepository courseRepository;
 
-    public long upload(
+    public Course upload(
         final String imageUrl,
         final String title,
         final String description,
         final List<PinRequest> pinRequests
     ) {
         final List<Pin> pins = IntStream.range(0, pinRequests.size())
-            .mapToObj(i -> new Pin(
-                pinRequests.get(i).latitude(),
-                pinRequests.get(i).longitude(),
-                new Sequence(i)))
+            .mapToObj(i -> new Pin(pinRequests.get(i).latitude(), pinRequests.get(i).longitude(), i))
             .toList();
 
         final Course course = new Course(imageUrl, title, description, new Pins(pins));

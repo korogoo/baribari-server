@@ -14,9 +14,9 @@ public class CourseRepositoryImpl implements CourseRepository {
     private final CourseJpaRepository courseJpaRepository;
 
     @Override
-    public long save(final Course course) {
+    public Course save(final Course course) {
         final CourseJpaEntity saved = courseJpaRepository.save(CourseMapper.toEntityForSave(course));
-        return saved.getId();
+        return CourseMapper.toDomain(saved);
     }
 
     @Override

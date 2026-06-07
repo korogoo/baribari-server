@@ -2,7 +2,7 @@ package com.twin.baribari.course.domain;
 
 public interface CourseRepository {
 
-    long save(Course course);
+    Course save(Course course);
 
     boolean existsById(long id);
 
