@@ -18,6 +18,8 @@ import com.twin.baribari.post.infrastructure.entity.PostJpaEntity;
 import com.twin.baribari.post.presentation.dto.CreatePostRequest;
 import com.twin.baribari.post.presentation.dto.UpdatePostRequest;
 import java.util.List;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -35,126 +37,187 @@ class PostControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private ObjectMapper objectMapper;
 
     @Autowired
     private PostJpaRepository postJpaRepository;
-
     @Autowired
     private CourseJpaRepository courseJpaRepository;
 
-    @Test
-    void 게시물을_업로드한다() throws Exception {
-        // given
-        final CreatePostRequest request = PostFixture.createRequest();
-        final long memberId = 1L;
+    @Nested
+    @DisplayName("게시물을 업로드한다")
+    class Upload {
 
-        // when
-        final ResultActions response = mockMvc.perform(post("/posts")
-            .queryParam("memberId", String.valueOf(memberId))
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(request)));
+        @Test
+        void 게시물을_업로드한다() throws Exception {
+            // given
+            final CreatePostRequest request = PostFixture.createRequest();
+            final long memberId = 1L;
 
-        // then
-        response
-            .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.id").isNumber());
+            // when
+            final ResultActions response = mockMvc.perform(post("/posts")
+                .queryParam("memberId", String.valueOf(memberId))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)));
 
-        List<PostJpaEntity> posts = postJpaRepository.findAll();
-        assertThat(posts).hasSize(1);
-        assertThat(posts.get(0).getTitle()).isEqualTo(request.title());
-        assertThat(posts.get(0).getMemberId()).isEqualTo(memberId);
+            // then
+            response
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isNumber());
 
-        List<CourseJpaEntity> courses = courseJpaRepository.findAll();
-        assertThat(courses).hasSize(1);
-        assertThat(courses.get(0).getTitle()).isEqualTo(request.courseTitle());
-        assertThat(courses.get(0).getPins()).hasSize(2);
+            List<PostJpaEntity> posts = postJpaRepository.findAll();
+            assertThat(posts).hasSize(1);
+            assertThat(posts.get(0).getTitle()).isEqualTo(request.title());
+            assertThat(posts.get(0).getMemberId()).isEqualTo(memberId);
+
+            List<CourseJpaEntity> courses = courseJpaRepository.findAll();
+            assertThat(courses).hasSize(1);
+            assertThat(courses.get(0).getTitle()).isEqualTo(request.courseTitle());
+            assertThat(courses.get(0).getPins()).hasSize(2);
+        }
     }
 
-    @Test
-    void 모든_게시물을_조회한다() throws Exception {
-        // given
-        final CourseJpaEntity course = courseJpaRepository.save(CourseFixture.entity());
-        final PostJpaEntity post = postJpaRepository.save(PostFixture.entity(course.getId()));
+    @Nested
+    @DisplayName("모든 게시물을 조회한다")
+    class GetAll {
 
-        // when
-        final ResultActions response = mockMvc.perform(get("/posts"));
+        @Test
+        void 모든_게시물을_조회한다() throws Exception {
+            // given
+            final CourseJpaEntity course = courseJpaRepository.save(CourseFixture.entity());
+            final PostJpaEntity post = postJpaRepository.save(PostFixture.entity(course.getId()));
 
-        // then
-        response
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.length()").value(1))
-            .andExpect(jsonPath("$[0].title").value(post.getTitle()))
-            .andExpect(jsonPath("$[0].memberId").value(post.getMemberId()));
+            // when & then
+            mockMvc.perform(get("/posts"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].title").value(post.getTitle()))
+                .andExpect(jsonPath("$[0].memberId").value(post.getMemberId()));
+        }
+
+        @Test
+        void 게시물이_없으면_빈_배열을_반환한다() throws Exception {
+            // when
+            final ResultActions response = mockMvc.perform(get("/posts"));
+
+            // then
+            response
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0));
+        }
     }
 
-    @Test
-    void 게시물_단건을_조회한다() throws Exception {
-        // given
-        final CourseJpaEntity course = courseJpaRepository.save(CourseFixture.entity());
-        final PostJpaEntity post = postJpaRepository.save(PostFixture.entity(course.getId()));
+    @Nested
+    @DisplayName("게시물 단건을 조회한다")
+    class GetById {
 
-        // when
-        final ResultActions response = mockMvc.perform(get("/posts/{id}", post.getId()));
+        @Test
+        void 게시물_단건을_조회한다() throws Exception {
+            // given
+            final CourseJpaEntity course = courseJpaRepository.save(CourseFixture.entity());
+            final PostJpaEntity post = postJpaRepository.save(PostFixture.entity(course.getId()));
 
-        // then
-        response
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id").value(post.getId()))
-            .andExpect(jsonPath("$.title").value(post.getTitle()))
-            .andExpect(jsonPath("$.body").value(post.getBody()))
-            .andExpect(jsonPath("$.memberId").value(post.getMemberId()));
+            // when
+            final ResultActions response = mockMvc.perform(get("/posts/{id}", post.getId()));
+
+            // then
+            response
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(post.getId()))
+                .andExpect(jsonPath("$.title").value(post.getTitle()))
+                .andExpect(jsonPath("$.body").value(post.getBody()))
+                .andExpect(jsonPath("$.memberId").value(post.getMemberId()));
+        }
+
+        @Test
+        void 존재하지_않는_게시물을_조회하면_404를_반환한다() throws Exception {
+            // given
+            final long unsavedId = 999L;
+
+            // when
+            final ResultActions response = mockMvc.perform(get("/posts/{id}", unsavedId));
+
+            // then
+            response
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("POST_NOT_FOUND"));
+        }
     }
 
-    @Test
-    void 게시물을_삭제한다() throws Exception {
-        // given
-        final CourseJpaEntity course = courseJpaRepository.save(CourseFixture.entity());
-        final PostJpaEntity post = postJpaRepository.save(PostFixture.entity(course.getId()));
+    @Nested
+    @DisplayName("PATCH /posts/{id}")
+    class Update {
 
-        // when
-        final ResultActions response = mockMvc.perform(delete("/posts/{id}", post.getId()));
+        @Test
+        void 게시물을_수정한다() throws Exception {
+            // given
+            final CourseJpaEntity course = courseJpaRepository.save(CourseFixture.entity());
+            final PostJpaEntity post = postJpaRepository.save(PostFixture.entity(course.getId()));
+            final UpdatePostRequest request = new UpdatePostRequest("수정된 제목", "수정된 내용");
 
-        // then
-        response.andExpect(status().isNoContent());
+            // when
+            final ResultActions response = mockMvc.perform(patch("/posts/{id}", post.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)));
 
-        assertThat(postJpaRepository.findById(post.getId())).isEmpty();
-        assertThat(courseJpaRepository.findById(course.getId())).isEmpty();
+            // then
+            response.andExpect(status().isNoContent());
+
+            final PostJpaEntity updated = postJpaRepository.findById(post.getId()).orElseThrow();
+            assertThat(updated.getTitle()).isEqualTo("수정된 제목");
+            assertThat(updated.getBody()).isEqualTo("수정된 내용");
+        }
+
+        @Test
+        void 존재하지_않는_게시물을_수정하면_404를_반환한다() throws Exception {
+            // given
+            final long unsavedId = 999L;
+            final UpdatePostRequest request = new UpdatePostRequest("수정된 제목", "수정된 내용");
+
+            // when
+            final ResultActions response = mockMvc.perform(patch("/posts/{id}", unsavedId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)));
+
+            // then
+            response
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("POST_NOT_FOUND"));
+        }
     }
 
-    @Test
-    void 존재하지_않는_게시물을_삭제하면_404를_반환한다() throws Exception {
-        // given
-        final long unsavedPostId = 999L;
+    @Nested
+    @DisplayName("DELETE /posts/{id}")
+    class Delete {
 
-        // when
-        final ResultActions response = mockMvc.perform(delete("/posts/{id}", unsavedPostId));
+        @Test
+        void 게시물을_삭제한다() throws Exception {
+            // given
+            final CourseJpaEntity course = courseJpaRepository.save(CourseFixture.entity());
+            final PostJpaEntity post = postJpaRepository.save(PostFixture.entity(course.getId()));
 
-        // then
-        response
-            .andExpect(status().isNotFound())
-            .andExpect(jsonPath("$.code").value("POST_NOT_FOUND"));
-    }
+            // when
+            mockMvc.perform(delete("/posts/{id}", post.getId()))
+                .andExpect(status().isNoContent());
 
-    @Test
-    void 게시물을_수정한다() throws Exception {
-        // given
-        final CourseJpaEntity course = courseJpaRepository.save(CourseFixture.entity());
-        final PostJpaEntity post = postJpaRepository.save(PostFixture.entity(course.getId()));
-        final UpdatePostRequest request = new UpdatePostRequest("수정된 제목", "수정된 내용");
+            // then
+            assertThat(postJpaRepository.findById(post.getId())).isEmpty();
+            assertThat(courseJpaRepository.findById(course.getId())).isEmpty();
+        }
 
-        // when
-        final ResultActions response = mockMvc.perform(patch("/posts/{id}", post.getId())
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(request)));
+        @Test
+        void 존재하지_않는_게시물을_삭제하면_404를_반환한다() throws Exception {
+            // given
+            final long unsavedId = 999L;
 
-        // then
-        response.andExpect(status().isNoContent());
+            // when
+            final ResultActions response = mockMvc.perform(delete("/posts/{id}", unsavedId));
 
-        final PostJpaEntity updated = postJpaRepository.findById(post.getId()).orElseThrow();
-        assertThat(updated.getTitle()).isEqualTo("수정된 제목");
-        assertThat(updated.getBody()).isEqualTo("수정된 내용");
+            // then
+            response
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("POST_NOT_FOUND"));
+        }
     }
 }
