@@ -1,6 +1,7 @@
 package com.twin.baribari.post.application;
 
 import com.twin.baribari.course.application.CourseService;
+import com.twin.baribari.course.domain.Course;
 import com.twin.baribari.global.application.dto.ResourceIdResponse;
 import com.twin.baribari.post.application.dto.PostDetailResponse;
 import com.twin.baribari.post.application.dto.PostSummaryResponse;
@@ -38,7 +39,7 @@ public class PostApplicationService {
 
     @Transactional
     public ResourceIdResponse upload(final CreatePostRequest request, final long memberId) {
-        long courseId = courseService.upload(
+        final Course uploadedCourse = courseService.upload(
             request.courseImageUrl(),
             request.courseTitle(),
             request.courseDescription(),
@@ -49,7 +50,7 @@ public class PostApplicationService {
             request.title(),
             request.body(),
             memberId,
-            courseId
+            uploadedCourse.getId()
         );
         return new ResourceIdResponse(uploadedPost.getId());
     }

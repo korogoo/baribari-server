@@ -58,4 +58,18 @@ public class Post {
             throw new IllegalStateException("게시물 코스의 아이디는 0 이상이어야 합니다.");
         }
     }
+
+    @Override
+    public boolean equals(final Object other) {
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+        final Post post = (Post) other;
+        return Objects.equals(id, post.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }
