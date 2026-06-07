@@ -2,6 +2,7 @@ package com.twin.baribari.post.presentation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -14,6 +15,7 @@ import com.twin.baribari.fixture.PostFixture;
 import com.twin.baribari.post.infrastructure.PostJpaRepository;
 import com.twin.baribari.post.infrastructure.entity.PostJpaEntity;
 import com.twin.baribari.post.presentation.dto.CreatePostRequest;
+import com.twin.baribari.post.presentation.dto.UpdatePostRequest;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,5 +99,26 @@ class PostControllerTest {
             .andExpect(jsonPath("$.title").value(post.getTitle()))
             .andExpect(jsonPath("$.body").value(post.getBody()))
             .andExpect(jsonPath("$.memberId").value(post.getMemberId()));
+    }
+
+    @Test
+    void 게시물을_수정한다() throws Exception {
+        // given
+        final CourseJpaEntity course = courseJpaRepository.save(CourseFixture.entity());
+        final PostJpaEntity post = postJpaRepository.save(PostFixture.entity(course.getId()));
+        final UpdatePostRequest request = new UpdatePostRequest("수정된 제목", "수정된 내용");
+
+        // when
+        final ResultActions response = mockMvc.perform(patch("/posts/{id}", post.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)));
+
+        // then
+        response
+            .andExpect(status().isNoContent());
+
+        final PostJpaEntity updated = postJpaRepository.findById(post.getId()).orElseThrow();
+        assertThat(updated.getTitle()).isEqualTo("수정된 제목");
+        assertThat(updated.getBody()).isEqualTo("수정된 내용");
     }
 }

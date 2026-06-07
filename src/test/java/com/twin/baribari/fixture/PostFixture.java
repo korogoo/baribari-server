@@ -29,6 +29,10 @@ public class PostFixture {
         return new Post("한강 라이딩 후기", "정말 좋았습니다.", 2L, 5L);
     }
 
+    public static Post domain(final String title, final String body) {
+        return new Post(title, body, 2L, 5L);
+    }
+
     public static Post domain(final long memberId, final long courseId) {
         return new Post("한강 라이딩 후기", "정말 좋았습니다.", memberId, courseId);
     }

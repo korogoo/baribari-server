@@ -37,6 +37,16 @@ public class Post {
         this(null, title, body, memberId, courseId);
     }
 
+    public Post update(final String newTitle, final String newBody) {
+        return new Post(
+            this.id,
+            Objects.requireNonNullElse(newTitle, this.title),
+            Objects.requireNonNullElse(newBody, this.body),
+            this.memberId,
+            this.courseId
+        );
+    }
+
     private void validateArguments() {
         Objects.requireNonNull(title, "게시물 title 은 필수값입니다.");
         Objects.requireNonNull(body, "게시물 body 는 필수값입니다.");

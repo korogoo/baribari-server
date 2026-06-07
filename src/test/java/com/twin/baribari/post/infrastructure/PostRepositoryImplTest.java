@@ -28,10 +28,10 @@ class PostRepositoryImplTest {
         final Post post = PostFixture.domain();
 
         // when
-        final long savedId = postRepository.save(post);
+        final Post saved = postRepository.save(post);
 
         // then
-        assertThat(postRepository.existsById(savedId)).isTrue();
+        assertThat(postRepository.existsById(saved.getId())).isTrue();
     }
 
     @Nested
@@ -42,7 +42,7 @@ class PostRepositoryImplTest {
         void 저장된_게시물을_조회하면_TRUE를_반환한다() {
             // given
             final Post post = PostFixture.domain();
-            final long savedId = postRepository.save(post);
+            final long savedId = postRepository.save(post).getId();
 
             // when
             final boolean exists = postRepository.existsById(savedId);
@@ -72,7 +72,7 @@ class PostRepositoryImplTest {
         void 저장된_게시물_정보를_아이디로_조회한다() {
             // given
             final Post post = PostFixture.domain();
-            final long savedId = postRepository.save(post);
+            final long savedId = postRepository.save(post).getId();
 
             // when
             final Post found = postRepository.getById(savedId);
@@ -126,7 +126,7 @@ class PostRepositoryImplTest {
         void 저장된_게시물을_아이디로_삭제한다() {
             // given
             final Post post = PostFixture.domain();
-            final long savedId = postRepository.save(post);
+            final long savedId = postRepository.save(post).getId();
 
             // when
             postRepository.deleteById(savedId);
@@ -143,6 +143,28 @@ class PostRepositoryImplTest {
             // when & then
             assertThatCode(() -> postRepository.deleteById(unsavedId))
                 .doesNotThrowAnyException();
+        }
+    }
+
+    @Nested
+    @DisplayName("게시물의 제목과 본문을 수정한다")
+    class Update {
+
+        @Test
+        void 저장된_게시물을_수정한다() {
+            // given
+            final Post post = PostFixture.domain("제목", "본문");
+            final Post saved = postRepository.save(post);
+
+            final Post expected = saved.update("새 제목", "새 본문");
+
+            // when
+            postRepository.update(expected);
+
+            // then
+            final Post actual = postRepository.getById(saved.getId());
+            assertThat(actual.getTitle()).isEqualTo(expected.getTitle());
+            assertThat(actual.getBody()).isEqualTo(expected.getBody());
         }
     }
 }

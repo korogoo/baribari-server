@@ -4,7 +4,9 @@ import com.twin.baribari.course.application.CourseService;
 import com.twin.baribari.global.application.dto.ResourceIdResponse;
 import com.twin.baribari.post.application.dto.PostDetailResponse;
 import com.twin.baribari.post.application.dto.PostSummaryResponse;
+import com.twin.baribari.post.domain.Post;
 import com.twin.baribari.post.presentation.dto.CreatePostRequest;
+import com.twin.baribari.post.presentation.dto.UpdatePostRequest;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,11 @@ public class PostApplicationService {
     }
 
     @Transactional
+    public void update(final long id, final UpdatePostRequest request) {
+        postService.update(id, request.title(), request.body());
+    }
+
+    @Transactional
     public ResourceIdResponse upload(final CreatePostRequest request, final long memberId) {
         long courseId = courseService.upload(
             request.courseImageUrl(),
@@ -38,12 +45,12 @@ public class PostApplicationService {
             request.coursePinRequests()
         );
 
-        long postId = postService.upload(
+        final Post uploadedPost = postService.upload(
             request.title(),
             request.body(),
             memberId,
             courseId
         );
-        return new ResourceIdResponse(postId);
+        return new ResourceIdResponse(uploadedPost.getId());
     }
 }

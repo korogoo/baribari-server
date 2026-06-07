@@ -16,11 +16,16 @@ public class PostService {
         return postRepository.getById(id);
     }
 
+    public void update(final long id, final String title, final String body) {
+        final Post post = postRepository.getById(id);
+        postRepository.update(post.update(title, body));
+    }
+
     public List<Post> getAll() {
         return postRepository.findAll();
     }
 
-    public long upload(
+    public Post upload(
         final String title,
         final String body,
         final long memberId,

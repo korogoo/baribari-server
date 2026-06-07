@@ -4,7 +4,9 @@ import java.util.List;
 
 public interface PostRepository {
 
-    long save(Post post);
+    Post save(Post post);
+
+    void update(Post post);
 
     boolean existsById(long id);
 

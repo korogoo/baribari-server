@@ -15,9 +15,16 @@ public class PostRepositoryImpl implements PostRepository {
     private final PostJpaRepository postJpaRepository;
 
     @Override
-    public long save(final Post post) {
+    public Post save(final Post post) {
         final PostJpaEntity saved = postJpaRepository.save(PostMapper.toEntityForSave(post));
-        return saved.getId();
+        return PostMapper.toDomain(saved);
+    }
+
+    @Override
+    public void update(final Post post) {
+        final PostJpaEntity entity = postJpaRepository.findById(post.getId())
+            .orElseThrow(RuntimeException::new);
+        entity.update(post.getTitle(), post.getBody());
     }
 
     @Override
