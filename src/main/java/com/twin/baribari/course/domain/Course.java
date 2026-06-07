@@ -55,7 +55,7 @@ public class Course {
             return false;
         }
         final Course course = (Course) other;
-        return Objects.equals(id, course.id);
+        return id != null && Objects.equals(id, course.id);
     }
 
     @Override

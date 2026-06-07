@@ -3,8 +3,10 @@ package com.twin.baribari.course.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.tuple;
 
 import com.twin.baribari.fixture.PinsFixture;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -75,5 +77,38 @@ class CourseTest {
             // then
             assertThat(equals).isFalse();
         }
+
+        @Test
+        void 아이디가_null_이면_다른_객체이다() {
+            // given
+            final Course post = new Course("url", "title", "description", PinsFixture.pins());
+            final Course other = new Course("url", "title", "description", PinsFixture.pins());
+
+            // when
+            final boolean equals = post.equals(other);
+
+            // then
+            assertThat(equals).isFalse();
+        }
+    }
+
+    @Test
+    void 모든_핀을_조회한다() {
+        // given
+        final Pins pins = PinsFixture.pins();
+        final Course course = new Course(1L, "url", "title", "description", pins);
+
+        // when
+        final List<Pin> actual = course.getPins();
+
+        // then
+        final List<Pin> expected = pins.toList();
+        assertThat(actual)
+            .extracting(Pin::getLatitude, Pin::getLongitude, Pin::sequenceValue)
+            .containsExactlyElementsOf(
+                expected.stream()
+                    .map(p -> tuple(p.getLatitude(), p.getLongitude(), p.sequenceValue()))
+                    .toList()
+            );
     }
 }
