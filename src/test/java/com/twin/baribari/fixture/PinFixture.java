@@ -1,7 +1,7 @@
 package com.twin.baribari.fixture;
 
 import com.twin.baribari.course.domain.Pin;
-import com.twin.baribari.course.domain.Sequence;
+
 import com.twin.baribari.course.infrastructure.entity.CourseJpaEntity;
 import com.twin.baribari.course.infrastructure.entity.PinJpaEntity;
 
@@ -11,7 +11,7 @@ public class PinFixture {
         return new Pin(
             37.5665,
             126.9780,
-            new Sequence(0)
+            0
         );
     }
 
@@ -19,7 +19,7 @@ public class PinFixture {
         return new Pin(
             37.5651,
             126.9895,
-            new Sequence(sequence)
+            sequence
         );
     }
 
@@ -27,7 +27,7 @@ public class PinFixture {
         return new Pin(
             37.5700,
             126.9820,
-            new Sequence(sequence)
+            sequence
         );
     }
 
