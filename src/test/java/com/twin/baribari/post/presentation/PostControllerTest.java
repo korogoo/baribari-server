@@ -64,7 +64,7 @@ class PostControllerTest {
             // then
             response
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").isNumber());
+                .andExpect(jsonPath("$.data.id").isNumber());
 
             List<PostJpaEntity> posts = postJpaRepository.findAll();
             assertThat(posts).hasSize(1);
@@ -91,9 +91,9 @@ class PostControllerTest {
             // when & then
             mockMvc.perform(get("/posts"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].title").value(post.getTitle()))
-                .andExpect(jsonPath("$[0].memberId").value(post.getMemberId()));
+                .andExpect(jsonPath("$.data.length()").value(1))
+                .andExpect(jsonPath("$.data[0].title").value(post.getTitle()))
+                .andExpect(jsonPath("$.data[0].memberId").value(post.getMemberId()));
         }
 
         @Test
@@ -104,7 +104,7 @@ class PostControllerTest {
             // then
             response
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(0));
+                .andExpect(jsonPath("$.data.length()").value(0));
         }
     }
 
@@ -124,10 +124,10 @@ class PostControllerTest {
             // then
             response
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(post.getId()))
-                .andExpect(jsonPath("$.title").value(post.getTitle()))
-                .andExpect(jsonPath("$.body").value(post.getBody()))
-                .andExpect(jsonPath("$.memberId").value(post.getMemberId()));
+                .andExpect(jsonPath("$.data.id").value(post.getId()))
+                .andExpect(jsonPath("$.data.title").value(post.getTitle()))
+                .andExpect(jsonPath("$.data.body").value(post.getBody()))
+                .andExpect(jsonPath("$.data.memberId").value(post.getMemberId()));
         }
 
         @Test
@@ -140,7 +140,7 @@ class PostControllerTest {
 
             // then
             response
-                .andExpect(status().isNotFound())
+                .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.code").value("POST_NOT_FOUND"));
         }
     }
@@ -182,7 +182,7 @@ class PostControllerTest {
 
             // then
             response
-                .andExpect(status().isNotFound())
+                .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.code").value("POST_NOT_FOUND"));
         }
     }
@@ -216,7 +216,7 @@ class PostControllerTest {
 
             // then
             response
-                .andExpect(status().isNotFound())
+                .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.code").value("POST_NOT_FOUND"));
         }
     }

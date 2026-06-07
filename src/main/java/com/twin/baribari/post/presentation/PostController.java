@@ -1,12 +1,14 @@
 package com.twin.baribari.post.presentation;
 
 import com.twin.baribari.global.application.dto.ResourceIdResponse;
+import com.twin.baribari.global.presentation.dto.ApiResponse;
 import com.twin.baribari.post.application.PostApplicationService;
 import com.twin.baribari.post.application.dto.PostDetailResponse;
 import com.twin.baribari.post.application.dto.PostSummaryResponse;
 import com.twin.baribari.post.presentation.dto.CreatePostRequest;
 import com.twin.baribari.post.presentation.dto.UpdatePostRequest;
 import java.util.List;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,24 +42,24 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostDetailResponse> getById(@PathVariable long id) {
-        return ResponseEntity.ok(postApplicationService.getById(id));
+    public ResponseEntity<ApiResponse<PostDetailResponse>> getById(@PathVariable long id) {
+        return ResponseEntity.ok(ApiResponse.of(postApplicationService.getById(id)));
     }
 
     @GetMapping
-    public ResponseEntity<List<PostSummaryResponse>> getAll() {
+    public ResponseEntity<ApiResponse<List<PostSummaryResponse>>> getAll() {
         // TODO: 페이징 적용 필요
-        return ResponseEntity.ok(postApplicationService.getAll());
+        return ResponseEntity.ok(ApiResponse.of(postApplicationService.getAll()));
     }
 
     @PostMapping
-    public ResponseEntity<ResourceIdResponse> upload(
-        @RequestBody CreatePostRequest request,
+    public ResponseEntity<ApiResponse<ResourceIdResponse>> upload(
+        @RequestBody @Valid CreatePostRequest request,
         @RequestParam Long memberId
     ) {
         final ResourceIdResponse response = postApplicationService.upload(request, memberId);
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(response);
+            .body(ApiResponse.of(response));
     }
 }
