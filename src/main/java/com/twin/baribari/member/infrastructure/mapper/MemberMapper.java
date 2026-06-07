@@ -7,6 +7,7 @@ public class MemberMapper {
 
     public static Member toDomain(final MemberJpaEntity entity) {
         return new Member(
+            entity.getId(),
             entity.getName(),
             entity.getEmail(),
             entity.getLoginProvider(),

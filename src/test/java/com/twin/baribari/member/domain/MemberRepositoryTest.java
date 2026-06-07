@@ -26,9 +26,9 @@ class MemberRepositoryTest {
         );
 
         // when
-        final long savedId = memberRepository.save(member);
+        final Member saved = memberRepository.save(member);
 
         // then
-        assertThat(savedId).isNotNull();
+        assertThat(saved.getId()).isPositive();
     }
 }

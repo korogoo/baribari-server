@@ -2,5 +2,5 @@ package com.twin.baribari.member.domain;
 
 public interface MemberRepository {
 
-    long save(Member member);
+    Member save(Member member);
 }
