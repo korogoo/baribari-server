@@ -10,6 +10,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostController {
 
     private final PostApplicationService postApplicationService;
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable long id) {
+        postApplicationService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 
     @PatchMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable long id, @RequestBody UpdatePostRequest request) {

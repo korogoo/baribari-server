@@ -2,6 +2,7 @@ package com.twin.baribari.post.application;
 
 import com.twin.baribari.course.application.CourseService;
 import com.twin.baribari.course.domain.Course;
+import com.twin.baribari.course.domain.exception.CourseNotFoundException;
 import com.twin.baribari.global.application.dto.ResourceIdResponse;
 import com.twin.baribari.post.application.dto.PostDetailResponse;
 import com.twin.baribari.post.application.dto.PostSummaryResponse;
@@ -35,6 +36,13 @@ public class PostApplicationService {
     @Transactional
     public void update(final long id, final UpdatePostRequest request) {
         postService.update(id, request.title(), request.body());
+    }
+
+    @Transactional
+    public void delete(final long id) {
+        final Post post = postService.getById(id);
+        courseService.delete(post.getCourseId());
+        postService.delete(id);
     }
 
     @Transactional

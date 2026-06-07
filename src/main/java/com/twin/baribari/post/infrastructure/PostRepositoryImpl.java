@@ -2,6 +2,7 @@ package com.twin.baribari.post.infrastructure;
 
 import com.twin.baribari.post.domain.Post;
 import com.twin.baribari.post.domain.PostRepository;
+import com.twin.baribari.post.domain.exception.PostNotFoundException;
 import com.twin.baribari.post.infrastructure.entity.PostJpaEntity;
 import com.twin.baribari.post.infrastructure.mapper.PostMapper;
 import java.util.List;
@@ -23,7 +24,7 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public void update(final Post post) {
         final PostJpaEntity entity = postJpaRepository.findById(post.getId())
-            .orElseThrow(RuntimeException::new);
+            .orElseThrow(() -> new PostNotFoundException(post.getId()));
         entity.update(post.getTitle(), post.getBody());
     }
 
@@ -35,7 +36,7 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public Post getById(final long id) {
         final PostJpaEntity found = postJpaRepository.findById(id)
-            .orElseThrow(RuntimeException::new);
+            .orElseThrow(() -> new PostNotFoundException(id));
         return PostMapper.toDomain(found);
     }
 

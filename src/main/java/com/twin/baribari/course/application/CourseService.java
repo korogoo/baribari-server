@@ -5,6 +5,7 @@ import com.twin.baribari.course.domain.Course;
 import com.twin.baribari.course.domain.CourseRepository;
 import com.twin.baribari.course.domain.Pin;
 import com.twin.baribari.course.domain.Pins;
+import com.twin.baribari.course.domain.exception.CourseNotFoundException;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -29,5 +30,12 @@ public class CourseService {
 
         final Course course = new Course(imageUrl, title, description, new Pins(pins));
         return courseRepository.save(course);
+    }
+
+    public void delete(final long id) {
+        if (!courseRepository.existsById(id)) {
+            throw new CourseNotFoundException(id);
+        }
+        courseRepository.deleteById(id);
     }
 }
