@@ -2,9 +2,9 @@ package com.twin.baribari.auth.domain;
 
 public interface TokenProvider {
 
-    String createAccessToken(Long memberId);
+    String createAccessToken(long memberId);
 
-    String createRefreshToken(Long memberId);
+    String createRefreshToken(long memberId);
 
     Long extractMemberId(String token);
 

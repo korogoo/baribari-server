@@ -35,12 +35,12 @@ public class JwtTokenProvider implements TokenProvider {
     }
 
     @Override
-    public String createAccessToken(final Long memberId) {
+    public String createAccessToken(final long memberId) {
         return buildToken(memberId, accessTokenExpiryMs);
     }
 
     @Override
-    public String createRefreshToken(final Long memberId) {
+    public String createRefreshToken(final long memberId) {
         return buildToken(memberId, refreshTokenExpiryMs);
     }
 
@@ -59,7 +59,7 @@ public class JwtTokenProvider implements TokenProvider {
         }
     }
 
-    private String buildToken(final Long memberId, final long expiryMs) {
+    private String buildToken(final long memberId, final long expiryMs) {
         final Date now = Date.from(clock.instant());
         return Jwts.builder()
             .claim(MEMBER_ID_CLAIM, memberId)
