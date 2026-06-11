@@ -2,10 +2,12 @@ package com.twin.baribari.member.infrastructure.mapper;
 
 import com.twin.baribari.member.domain.Member;
 import com.twin.baribari.member.infrastructure.entity.MemberJpaEntity;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MemberMapper {
 
-    public static Member toDomain(final MemberJpaEntity entity) {
+    public Member toDomain(final MemberJpaEntity entity) {
         return new Member(
             entity.getId(),
             entity.getName(),
@@ -15,7 +17,7 @@ public class MemberMapper {
         );
     }
 
-    public static MemberJpaEntity toEntityForSave(final Member domain) {
+    public MemberJpaEntity toEntityForSave(final Member domain) {
         return MemberJpaEntity.builder()
             .name(domain.getName())
             .email(domain.getEmail())
