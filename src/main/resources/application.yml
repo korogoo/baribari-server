@@ -16,8 +16,3 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: create
-
-jwt:
-  secret: test-test-test-test-test-test-test #  openssl rand -base64 32
-  access-token-expiry-minutes: 15
-  refresh-token-expiry-days: 7
