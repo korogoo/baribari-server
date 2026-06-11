@@ -9,13 +9,15 @@ import org.junit.jupiter.api.Test;
 
 class MemberMapperTest {
 
+    private final MemberMapper memberMapper = new MemberMapper();
+
     @Test
     void 회원_jpa엔티티를_도메인_엔티티로_변환한다() {
         // given
         final MemberJpaEntity entity = MemberFixture.entity();
 
         // when
-        final Member domain = MemberMapper.toDomain(entity);
+        final Member domain = memberMapper.toDomain(entity);
 
         // then
         assertThat(domain.getId()).isEqualTo(entity.getId());
@@ -31,7 +33,7 @@ class MemberMapperTest {
         final Member domain = MemberFixture.domainForSave();
 
         // when
-        final MemberJpaEntity entity = MemberMapper.toEntityForSave(domain);
+        final MemberJpaEntity entity = memberMapper.toEntityForSave(domain);
 
         // then
         assertThat(entity.getId()).isNull();
